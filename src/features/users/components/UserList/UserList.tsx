@@ -18,6 +18,7 @@ export interface UserListProps {
   error: Error | null;
   query: string;
   onPageChange: (page: number) => void;
+  onSelectUser?: (login: string) => void;
   onRetry?: () => void;
 }
 
@@ -30,6 +31,7 @@ export const UserList: React.FC<UserListProps> = ({
   error,
   query,
   onPageChange,
+  onSelectUser,
   onRetry,
 }) => {
   if (error) {
@@ -47,18 +49,10 @@ export const UserList: React.FC<UserListProps> = ({
       <div className={styles.grid}>
         {Array.from({ length: 6 }).map((_, idx) => (
           <div key={`user-skeleton-${idx}`} className={styles.skeletonCard}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <Skeleton variant="circular" width={48} height={48} />
-              <div style={{ flex: 1 }}>
-                <Skeleton variant="text" width="60%" height={16} />
-                <Skeleton variant="text" width="40%" height={12} />
-              </div>
-            </div>
-            <Skeleton variant="text" width="90%" height={14} />
-            <Skeleton variant="rectangular" width="100%" height={50} />
-            <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between' }}>
-              <Skeleton variant="text" width={80} height={14} />
-              <Skeleton variant="text" width={40} height={14} />
+            <Skeleton variant="circular" width={44} height={44} />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <Skeleton variant="text" width="60%" height={16} />
+              <Skeleton variant="text" width="40%" height={12} />
             </div>
           </div>
         ))}
@@ -90,7 +84,11 @@ export const UserList: React.FC<UserListProps> = ({
     <div>
       <div className={styles.grid}>
         {users.map((user) => (
-          <UserCard key={user.id} user={user} />
+          <UserCard
+            key={user.id}
+            user={user}
+            onSelect={onSelectUser}
+          />
         ))}
       </div>
 

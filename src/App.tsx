@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Compass, Sparkles, Moon, Sun } from 'lucide-react';
 import { GitHubProvider } from './context/GitHubContext';
@@ -6,6 +6,7 @@ import { RateLimitBanner } from './components/feedback/RateLimitBanner';
 import { SearchBar } from './features/search/components/SearchBar/SearchBar';
 import { RepositoryList } from './features/repositories/components/RepositoryList/RepositoryList';
 import { UserList } from './features/users/components/UserList/UserList';
+import { UserDetailModal } from './features/users/components/UserDetailModal/UserDetailModal';
 import { useUrlState } from './hooks/useUrlState';
 import { useDebounce } from './hooks/useDebounce';
 import { useSearchRepositoriesQuery } from './features/search/hooks/useSearchRepositoriesQuery';
@@ -33,7 +34,8 @@ const DashboardContent: React.FC = () => {
     setLanguage,
   } = useUrlState();
 
-  const [theme, setTheme] = React.useState<'dark' | 'light'>('dark');
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
 
   // Debounce search query by 380ms to avoid excessive API requests while typing
   const debouncedQuery = useDebounce(query, 380);
@@ -133,7 +135,7 @@ const DashboardContent: React.FC = () => {
               }}
             >
               <Sparkles size={12} color="var(--color-accent)" />
-              Sprint 3: Active
+              Sprint 3: Optimized
             </span>
           </div>
         </div>
@@ -178,9 +180,16 @@ const DashboardContent: React.FC = () => {
             error={userError}
             query={debouncedQuery}
             onPageChange={setPage}
+            onSelectUser={setSelectedUser}
             onRetry={refetchUsers}
           />
         )}
+
+        {/* On-Demand Developer Details Modal */}
+        <UserDetailModal
+          username={selectedUser}
+          onClose={() => setSelectedUser(null)}
+        />
       </main>
     </div>
   );
