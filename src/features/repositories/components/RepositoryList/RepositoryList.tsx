@@ -9,6 +9,8 @@ import { Pagination } from '../../../../components/ui/Pagination';
 import { getErrorMessage } from '../../../../api/errors';
 import styles from './RepositoryList.module.css';
 
+const REPO_SUGGESTIONS = ['react', 'typescript', 'rust', 'machine-learning', 'vite'];
+
 export interface RepositoryListProps {
   repositories: GitHubRepository[];
   totalCount: number;
@@ -19,6 +21,7 @@ export interface RepositoryListProps {
   query: string;
   onPageChange: (page: number) => void;
   onSelectRepo: (fullName: string) => void;
+  onSelectQuery?: (query: string) => void;
   onRetry?: () => void;
 }
 
@@ -32,6 +35,7 @@ export const RepositoryList: React.FC<RepositoryListProps> = ({
   query,
   onPageChange,
   onSelectRepo,
+  onSelectQuery,
   onRetry,
 }) => {
   if (error) {
@@ -71,6 +75,34 @@ export const RepositoryList: React.FC<RepositoryListProps> = ({
         icon={<Search size={28} />}
         title="Explore GitHub Repositories"
         description="Search across millions of open-source projects by typing in keywords, project names, or languages."
+        action={
+          onSelectQuery ? (
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '4px' }}>
+              <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', width: '100%', marginBottom: '4px' }}>
+                Quick suggestions:
+              </span>
+              {REPO_SUGGESTIONS.map((term) => (
+                <button
+                  key={term}
+                  type="button"
+                  onClick={() => onSelectQuery(term)}
+                  style={{
+                    padding: '4px 12px',
+                    fontSize: 'var(--font-size-xs)',
+                    backgroundColor: 'var(--color-surface-raised)',
+                    border: '1px solid var(--color-border)',
+                    borderRadius: 'var(--radius-full)',
+                    color: 'var(--color-accent)',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  {term}
+                </button>
+              ))}
+            </div>
+          ) : undefined
+        }
       />
     );
   }

@@ -9,6 +9,8 @@ import { Pagination } from '../../../../components/ui/Pagination';
 import { getErrorMessage } from '../../../../api/errors';
 import styles from './UserList.module.css';
 
+const DEV_SUGGESTIONS = ['torvalds', 'gaearon', 'sindresorhus', 'yyx990803'];
+
 export interface UserListProps {
   users: GitHubUserItem[];
   totalCount: number;
@@ -19,6 +21,7 @@ export interface UserListProps {
   query: string;
   onPageChange: (page: number) => void;
   onSelectUser?: (login: string) => void;
+  onSelectQuery?: (query: string) => void;
   onRetry?: () => void;
 }
 
@@ -32,6 +35,7 @@ export const UserList: React.FC<UserListProps> = ({
   query,
   onPageChange,
   onSelectUser,
+  onSelectQuery,
   onRetry,
 }) => {
   if (error) {
@@ -66,6 +70,34 @@ export const UserList: React.FC<UserListProps> = ({
         icon={<Search size={28} />}
         title="Find GitHub Developers"
         description="Search for open-source contributors, engineers, and creators by username or keywords."
+        action={
+          onSelectQuery ? (
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '4px' }}>
+              <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', width: '100%', marginBottom: '4px' }}>
+                Popular developer handles:
+              </span>
+              {DEV_SUGGESTIONS.map((handle) => (
+                <button
+                  key={handle}
+                  type="button"
+                  onClick={() => onSelectQuery(handle)}
+                  style={{
+                    padding: '4px 12px',
+                    fontSize: 'var(--font-size-xs)',
+                    backgroundColor: 'var(--color-surface-raised)',
+                    border: '1px solid var(--color-border)',
+                    borderRadius: 'var(--radius-full)',
+                    color: 'var(--color-accent)',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  @{handle}
+                </button>
+              ))}
+            </div>
+          ) : undefined
+        }
       />
     );
   }

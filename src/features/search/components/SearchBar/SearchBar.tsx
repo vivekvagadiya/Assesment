@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Search, X, Code, Users } from 'lucide-react';
 import { Input } from '../../../../components/ui/Input';
 import { Tabs, TabItem } from '../../../../components/ui/Tabs';
@@ -41,6 +41,26 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   repoCount,
   userCount,
 }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Keyboard shortcut: Press "/" anywhere on the page to focus search input
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key === '/' &&
+        document.activeElement?.tagName !== 'INPUT' &&
+        document.activeElement?.tagName !== 'TEXTAREA' &&
+        document.activeElement?.tagName !== 'SELECT'
+      ) {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const tabs: TabItem[] = [
     {
       id: 'repos',
@@ -61,6 +81,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       <div className={styles.searchBarWrapper}>
         <div className={styles.inputWrapper}>
           <Input
+            ref={inputRef}
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
             placeholder={
@@ -73,13 +94,20 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               query ? (
                 <button
                   type="button"
-                  onClick={() => onQueryChange('')}
+                  onClick={() => {
+                    onQueryChange('');
+                    inputRef.current?.focus();
+                  }}
                   className={styles.clearButton}
                   aria-label="Clear search input"
                 >
                   <X size={16} />
                 </button>
-              ) : undefined
+              ) : (
+                <kbd className={styles.kbd} title="Press / to focus search">
+                  /
+                </kbd>
+              )
             }
             autoComplete="off"
             spellCheck={false}

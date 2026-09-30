@@ -31,6 +31,18 @@
   color: var(--color-text-primary);
 }
 
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 6px;
+  background-color: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  user-select: none;
+  pointer-events: none;
+}
+
 .filterRow {
   display: flex;
   align-items: center;

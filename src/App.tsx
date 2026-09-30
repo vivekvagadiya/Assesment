@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Compass, Sparkles, Moon, Sun } from 'lucide-react';
+import { Compass, Moon, Sun } from 'lucide-react';
 import { GitHubProvider } from './context/GitHubContext';
 import { RateLimitBanner } from './components/feedback/RateLimitBanner';
 import { OfflineBanner } from './components/feedback/OfflineBanner';
@@ -67,6 +67,12 @@ const DashboardContent: React.FC = () => {
     page,
     enabled: tab === 'users',
   });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.scrollY > 0) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [page]);
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -139,7 +145,7 @@ const DashboardContent: React.FC = () => {
               {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
             </button>
 
-            <span
+            {/* <span
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -153,7 +159,7 @@ const DashboardContent: React.FC = () => {
             >
               <Sparkles size={12} color="var(--color-accent)" />
               Production Ready
-            </span>
+            </span> */}
           </div>
         </div>
       </header>
@@ -192,6 +198,7 @@ const DashboardContent: React.FC = () => {
             query={debouncedQuery}
             onPageChange={setPage}
             onSelectRepo={setSelectedRepo}
+            onSelectQuery={(term) => setQuery(term)}
             onRetry={refetchRepos}
           />
         ) : (
@@ -205,6 +212,7 @@ const DashboardContent: React.FC = () => {
             query={debouncedQuery}
             onPageChange={setPage}
             onSelectUser={setSelectedUser}
+            onSelectQuery={(term) => setQuery(term)}
             onRetry={refetchUsers}
           />
         )}
