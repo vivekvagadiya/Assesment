@@ -1,12 +1,77 @@
 import React from 'react';
-import { Card } from './components/ui/Card';
-import { Badge } from './components/ui/Badge';
-import { Button } from './components/ui/Button';
-import { Compass, Sparkles } from 'lucide-react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Compass, Sparkles, Moon, Sun } from 'lucide-react';
+import { GitHubProvider } from './context/GitHubContext';
+import { RateLimitBanner } from './components/feedback/RateLimitBanner';
+import { SearchBar } from './features/search/components/SearchBar/SearchBar';
+import { RepositoryList } from './features/repositories/components/RepositoryList/RepositoryList';
+import { UserList } from './features/users/components/UserList/UserList';
+import { useUrlState } from './hooks/useUrlState';
+import { useDebounce } from './hooks/useDebounce';
+import { useSearchRepositoriesQuery } from './features/search/hooks/useSearchRepositoriesQuery';
+import { useSearchUsersQuery } from './features/search/hooks/useSearchUsersQuery';
 
-export const App: React.FC = () => {
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000,
+    },
+  },
+});
+
+const DashboardContent: React.FC = () => {
+  const {
+    query,
+    tab,
+    page,
+    language,
+    setQuery,
+    setTab,
+    setPage,
+    setSelectedRepo,
+    setLanguage,
+  } = useUrlState();
+
+  const [theme, setTheme] = React.useState<'dark' | 'light'>('dark');
+
+  // Debounce search query by 380ms to avoid excessive API requests while typing
+  const debouncedQuery = useDebounce(query, 380);
+
+  // Queries
+  const {
+    data: repoData,
+    isLoading: isRepoLoading,
+    error: repoError,
+    refetch: refetchRepos,
+  } = useSearchRepositoriesQuery({
+    query: debouncedQuery,
+    page,
+    language,
+    enabled: tab === 'repos',
+  });
+
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    error: userError,
+    refetch: refetchUsers,
+  } = useSearchUsersQuery({
+    query: debouncedQuery,
+    page,
+    enabled: tab === 'users',
+  });
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    document.documentElement.setAttribute('data-theme', nextTheme);
+  };
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <RateLimitBanner />
+
       <header
         style={{
           borderBottom: '1px solid var(--color-border)',
@@ -24,32 +89,110 @@ export const App: React.FC = () => {
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
             <Compass size={24} color="var(--color-accent)" />
-            <h1 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 'var(--font-weight-bold)' }}>
-              Developer Intelligence Dashboard
-            </h1>
+            <div>
+              <h1 style={{ fontSize: 'var(--font-size-base)', fontWeight: 'var(--font-weight-bold)', margin: 0 }}>
+                Developer Intelligence
+              </h1>
+              <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-secondary)' }}>
+                GitHub Search & Insights
+              </span>
+            </div>
           </div>
-          <Badge variant="primary" size="sm">
-            <Sparkles size={12} style={{ marginRight: 4 }} />
-            Sprint 1: Ready
-          </Badge>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+            <button
+              type="button"
+              onClick={toggleTheme}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 'var(--space-2)',
+                borderRadius: 'var(--radius-md)',
+                color: 'var(--color-text-secondary)',
+                border: '1px solid var(--color-border)',
+                backgroundColor: 'var(--color-surface)',
+                cursor: 'pointer',
+              }}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            >
+              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontSize: 'var(--font-size-xs)',
+                color: 'var(--color-text-secondary)',
+                padding: '4px 8px',
+                backgroundColor: 'var(--color-surface-raised)',
+                borderRadius: 'var(--radius-full)',
+              }}
+            >
+              <Sparkles size={12} color="var(--color-accent)" />
+              Sprint 3: Active
+            </span>
+          </div>
         </div>
       </header>
 
-      <main className="container" style={{ flex: 1, padding: 'var(--space-8) var(--space-4)' }}>
-        <Card padding="lg">
-          <h2 style={{ fontSize: 'var(--font-size-xl)', marginBottom: 'var(--space-2)' }}>
-            Design System Foundation
-          </h2>
-          <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-4)' }}>
-            Design tokens, responsive grid, strict TypeScript, and accessible UI primitives have been established.
-          </p>
-          <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
-            <Button variant="primary">Explore Repositories</Button>
-            <Button variant="outline">Search Developers</Button>
-          </div>
-        </Card>
+      <main
+        className="container"
+        style={{ flex: 1, padding: 'var(--space-6) var(--space-4)' }}
+      >
+        <SearchBar
+          query={query}
+          onQueryChange={(val) => setQuery(val, true)}
+          activeTab={tab}
+          onTabChange={setTab}
+          language={language}
+          onLanguageChange={setLanguage}
+          repoCount={repoData?.total_count}
+          userCount={userData?.total_count}
+          isLoading={isRepoLoading || isUserLoading}
+        />
+
+        {tab === 'repos' ? (
+          <RepositoryList
+            repositories={repoData?.items || []}
+            totalCount={repoData?.total_count || 0}
+            currentPage={page}
+            pageSize={20}
+            isLoading={isRepoLoading}
+            error={repoError}
+            query={debouncedQuery}
+            onPageChange={setPage}
+            onSelectRepo={setSelectedRepo}
+            onRetry={refetchRepos}
+          />
+        ) : (
+          <UserList
+            users={userData?.items || []}
+            totalCount={userData?.total_count || 0}
+            currentPage={page}
+            pageSize={20}
+            isLoading={isUserLoading}
+            error={userError}
+            query={debouncedQuery}
+            onPageChange={setPage}
+            onRetry={refetchUsers}
+          />
+        )}
       </main>
     </div>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <GitHubProvider>
+        <DashboardContent />
+      </GitHubProvider>
+    </QueryClientProvider>
   );
 };
 
