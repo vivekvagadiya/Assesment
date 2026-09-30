@@ -1,0 +1,70 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.sm {
+  padding: 2px 8px;
+  font-size: var(--font-size-xs);
+}
+
+.md {
+  padding: 4px 10px;
+  font-size: var(--font-size-xs);
+}
+
+.default {
+  background-color: var(--color-surface-raised);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+
+.primary {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-accent);
+  border-color: var(--color-accent-border);
+}
+
+.success {
+  background-color: var(--color-success-subtle);
+  color: var(--color-success-text);
+  border-color: rgba(63, 185, 80, 0.3);
+}
+
+.warning {
+  background-color: var(--color-warning-subtle);
+  color: var(--color-warning-text);
+  border-color: rgba(210, 153, 34, 0.3);
+}
+
+.danger {
+  background-color: var(--color-danger-subtle);
+  color: var(--color-danger-text);
+  border-color: rgba(248, 81, 73, 0.3);
+}
+
+.purple {
+  background-color: var(--color-purple-subtle);
+  color: var(--color-purple);
+  border-color: rgba(137, 87, 229, 0.3);
+}
+
+.outline {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background-color: currentColor;
+}
