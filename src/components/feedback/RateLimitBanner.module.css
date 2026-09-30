@@ -1,0 +1,67 @@
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-xs);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+}
+
+.warningBanner {
+  background-color: var(--color-warning-subtle);
+  border-bottom-color: rgba(210, 153, 34, 0.4);
+  color: var(--color-warning-text);
+}
+
+.errorBanner {
+  background-color: var(--color-danger-subtle);
+  border-bottom-color: rgba(248, 81, 73, 0.4);
+  color: var(--color-danger-text);
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.tokenBtn {
+  font-size: var(--font-size-xs);
+  color: var(--color-accent);
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.tokenBtn:hover {
+  color: var(--color-accent-hover);
+}
+
+.indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+}
+
+.tokenModalForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.tokenHelpText {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
