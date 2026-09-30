@@ -8,7 +8,7 @@ import {
   GitBranch,
   Calendar,
   Clock,
-} from 'lucide-react';
+} from '../../../../components/ui/icons';
 import { useRepositoryDetailsQuery } from '../../hooks/useRepositoryDetailsQuery';
 import { IssueList } from '../IssueList/IssueList';
 import { Modal } from '../../../../components/ui/Modal';

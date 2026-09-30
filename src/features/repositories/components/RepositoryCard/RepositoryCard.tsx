@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, GitFork, AlertCircle, ExternalLink } from 'lucide-react';
+import { Star, GitFork, AlertCircle, ExternalLink } from '../../../../components/ui/icons';
 import { GitHubRepository } from '../../../../api/types/github';
 import { Card } from '../../../../components/ui/Card';
 import { Badge } from '../../../../components/ui/Badge';

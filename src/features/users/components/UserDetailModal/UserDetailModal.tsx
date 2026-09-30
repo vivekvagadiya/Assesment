@@ -5,7 +5,7 @@ import {
   Building,
   Link as LinkIcon,
   Calendar,
-} from 'lucide-react';
+} from '../../../../components/ui/icons';
 import { useEnrichedUser } from '../../hooks/useEnrichedUser';
 import { Modal } from '../../../../components/ui/Modal';
 import { Button } from '../../../../components/ui/Button';

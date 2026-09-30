@@ -1,5 +1,5 @@
 import React from 'react';
-import { WifiOff } from 'lucide-react';
+import { WifiOff } from '../ui/icons';
 import { useNetworkStatus } from '../../hooks/useNetworkStatus';
 import styles from './OfflineBanner.module.css';
 

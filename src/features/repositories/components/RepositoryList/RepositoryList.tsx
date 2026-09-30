@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Search } from 'lucide-react';
+import { BookOpen, Search } from '../../../../components/ui/icons';
 import { GitHubRepository } from '../../../../api/types/github';
 import { RepositoryCard } from '../RepositoryCard/RepositoryCard';
 import { Skeleton } from '../../../../components/ui/Skeleton';

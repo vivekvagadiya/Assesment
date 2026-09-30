@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertCircle, RefreshCw } from 'lucide-react';
+import { AlertCircle, RefreshCw } from '../icons';
 import { Button } from '../Button';
 import styles from './ErrorAlert.module.css';
 

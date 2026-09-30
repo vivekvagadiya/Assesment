@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AlertTriangle, Key, ShieldCheck, Zap } from 'lucide-react';
+import { AlertTriangle, Key, ShieldCheck, Zap } from '../ui/icons';
 import { useGitHub } from '../../context/GitHubContext';
 import { Modal } from '../ui/Modal';
 import { Input } from '../ui/Input';

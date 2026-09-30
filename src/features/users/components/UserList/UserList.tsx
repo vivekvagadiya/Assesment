@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, Search } from 'lucide-react';
+import { Users, Search } from '../../../../components/ui/icons';
 import { GitHubUserItem } from '../../../../api/types/github';
 import { UserCard } from '../UserCard/UserCard';
 import { Skeleton } from '../../../../components/ui/Skeleton';

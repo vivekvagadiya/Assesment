@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle } from '../../../../components/ui/icons';
 import { useRepositoryIssuesQuery } from '../../hooks/useRepositoryIssuesQuery';
 import { IssueItem } from '../IssueItem/IssueItem';
 import { Skeleton } from '../../../../components/ui/Skeleton';

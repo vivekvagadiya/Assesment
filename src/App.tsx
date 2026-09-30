@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Compass, Moon, Sun } from 'lucide-react';
+import { Compass, Moon, Sun } from './components/ui/icons';
 import { GitHubProvider } from './context/GitHubContext';
 import { RateLimitBanner } from './components/feedback/RateLimitBanner';
 import { OfflineBanner } from './components/feedback/OfflineBanner';

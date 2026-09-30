@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { Search, X, Code, Users } from 'lucide-react';
+import { Search, X, Code, Users } from '../../../../components/ui/icons';
 import { Input } from '../../../../components/ui/Input';
 import { Tabs, TabItem } from '../../../../components/ui/Tabs';
 import { SearchTabType } from '../../../../hooks/useUrlState';

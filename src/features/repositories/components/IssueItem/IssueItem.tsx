@@ -1,5 +1,5 @@
 import React from 'react';
-import { CircleDot, CheckCircle2, MessageSquare, ExternalLink } from 'lucide-react';
+import { CircleDot, CheckCircle2, MessageSquare, ExternalLink } from '../../../../components/ui/icons';
 import { GitHubIssue } from '../../../../api/types/github';
 import { formatRelativeTime } from '../../../../utils/dateUtils';
 import styles from './IssueItem.module.css';

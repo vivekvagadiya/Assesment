@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, ChevronRight, Shield } from 'lucide-react';
+import { ExternalLink, ChevronRight, Shield } from '../../../../components/ui/icons';
 import { GitHubUserItem } from '../../../../api/types/github';
 import { Badge } from '../../../../components/ui/Badge';
 import styles from './UserCard.module.css';
