@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Compass, Sparkles, Moon, Sun } from 'lucide-react';
 import { GitHubProvider } from './context/GitHubContext';
 import { RateLimitBanner } from './components/feedback/RateLimitBanner';
+import { OfflineBanner } from './components/feedback/OfflineBanner';
 import { SearchBar } from './features/search/components/SearchBar/SearchBar';
 import { RepositoryList } from './features/repositories/components/RepositoryList/RepositoryList';
 import { UserList } from './features/users/components/UserList/UserList';
@@ -10,6 +11,7 @@ import { UserDetailModal } from './features/users/components/UserDetailModal/Use
 import { RepositoryDetailModal } from './features/repositories/components/RepositoryDetailModal/RepositoryDetailModal';
 import { useUrlState } from './hooks/useUrlState';
 import { useDebounce } from './hooks/useDebounce';
+import { useTheme } from './hooks/useTheme';
 import { useSearchRepositoriesQuery } from './features/search/hooks/useSearchRepositoriesQuery';
 import { useSearchUsersQuery } from './features/search/hooks/useSearchUsersQuery';
 
@@ -36,7 +38,7 @@ const DashboardContent: React.FC = () => {
     setLanguage,
   } = useUrlState();
 
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const { theme, toggleTheme } = useTheme();
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
 
   // Debounce search query by 380ms to avoid excessive API requests while typing
@@ -66,14 +68,27 @@ const DashboardContent: React.FC = () => {
     enabled: tab === 'users',
   });
 
-  const toggleTheme = () => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(nextTheme);
-    document.documentElement.setAttribute('data-theme', nextTheme);
-  };
-
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* Accessible Skip Link */}
+      <a
+        href="#main-search-content"
+        className="sr-only"
+        style={{
+          position: 'absolute',
+          top: '8px',
+          left: '8px',
+          zIndex: 9999,
+          padding: '8px 12px',
+          background: 'var(--color-accent)',
+          color: '#ffffff',
+          borderRadius: 'var(--radius-md)',
+        }}
+      >
+        Skip to main content
+      </a>
+
+      <OfflineBanner />
       <RateLimitBanner />
 
       <header
@@ -98,7 +113,7 @@ const DashboardContent: React.FC = () => {
                 Developer Intelligence
               </h1>
               <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-secondary)' }}>
-                GitHub Search & Insights
+                GitHub Search & Repository Insights
               </span>
             </div>
           </div>
@@ -137,13 +152,14 @@ const DashboardContent: React.FC = () => {
               }}
             >
               <Sparkles size={12} color="var(--color-accent)" />
-              Sprint 4: Active
+              Production Ready
             </span>
           </div>
         </div>
       </header>
 
       <main
+        id="main-search-content"
         className="container"
         style={{ flex: 1, padding: 'var(--space-6) var(--space-4)' }}
       >
@@ -158,6 +174,12 @@ const DashboardContent: React.FC = () => {
           userCount={userData?.total_count}
           isLoading={isRepoLoading || isUserLoading}
         />
+
+        {/* Accessible Search Result Status for Screen Readers */}
+        <div aria-live="polite" className="sr-only">
+          {tab === 'repos' && repoData && `Found ${repoData.total_count} repositories`}
+          {tab === 'users' && userData && `Found ${userData.total_count} developers`}
+        </div>
 
         {tab === 'repos' ? (
           <RepositoryList
