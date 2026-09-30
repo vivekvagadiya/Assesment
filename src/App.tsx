@@ -7,6 +7,7 @@ import { SearchBar } from './features/search/components/SearchBar/SearchBar';
 import { RepositoryList } from './features/repositories/components/RepositoryList/RepositoryList';
 import { UserList } from './features/users/components/UserList/UserList';
 import { UserDetailModal } from './features/users/components/UserDetailModal/UserDetailModal';
+import { RepositoryDetailModal } from './features/repositories/components/RepositoryDetailModal/RepositoryDetailModal';
 import { useUrlState } from './hooks/useUrlState';
 import { useDebounce } from './hooks/useDebounce';
 import { useSearchRepositoriesQuery } from './features/search/hooks/useSearchRepositoriesQuery';
@@ -27,6 +28,7 @@ const DashboardContent: React.FC = () => {
     tab,
     page,
     language,
+    selectedRepo,
     setQuery,
     setTab,
     setPage,
@@ -135,7 +137,7 @@ const DashboardContent: React.FC = () => {
               }}
             >
               <Sparkles size={12} color="var(--color-accent)" />
-              Sprint 3: Optimized
+              Sprint 4: Active
             </span>
           </div>
         </div>
@@ -189,6 +191,12 @@ const DashboardContent: React.FC = () => {
         <UserDetailModal
           username={selectedUser}
           onClose={() => setSelectedUser(null)}
+        />
+
+        {/* On-Demand Repository Details & Issues Explorer Modal */}
+        <RepositoryDetailModal
+          fullName={selectedRepo}
+          onClose={() => setSelectedRepo(null)}
         />
       </main>
     </div>
