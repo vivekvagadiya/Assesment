@@ -65,13 +65,13 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     {
       id: 'repos',
       label: 'Repositories',
-      count: repoCount,
+      count: query.trim() ? repoCount : undefined,
       icon: <Code size={16} />,
     },
     {
       id: 'users',
       label: 'Developers',
-      count: userCount,
+      count: query.trim() ? userCount : undefined,
       icon: <Users size={16} />,
     },
   ];
